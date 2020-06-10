@@ -15,7 +15,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -50,8 +49,8 @@ public class ApplicationAnalyzer extends Analyzer {
 			node.put("language", "Java");
 			node.put("name", file.getName());
 
-			File dir = mkdir();
-			unzipTo(dir);
+			File dir = mkdir(file.getParentFile());
+			unzipTo(file.getAbsolutePath(), dir);
 
 			Properties props = getJarProp(new FileInputStream(new File(dir.getAbsolutePath(), "META-INF/MANIFEST.MF")));
 
@@ -113,11 +112,45 @@ public class ApplicationAnalyzer extends Analyzer {
 					item.put("version", jn.get("version").asText());
 					deps.add(item);
 				} catch (Exception e) {
-					System.err.println("not maven, may be bunlde: " + f.getAbsolutePath());
+					System.err.println("not maven, may be bunlde: " + f.getName());
+					ObjectNode item = new ObjectMapper().createObjectNode();
+					int idx = f.getName().lastIndexOf("-");
+					int edx = f.getName().lastIndexOf(".");
+					String artifactId = f.getName().substring(0, idx);
+					String version = f.getName().substring(idx + 1, edx);
+
+					File tempdir = mkdir(f.getParentFile());
+					unzipTo(f.getAbsolutePath(), tempdir);
+
+					String groupId = getGroupId(tempdir.getAbsoluteFile());
+
+					groupId = (groupId.length() == 0) ? artifactId : groupId;
+
+					groupId = groupId.endsWith(".") ? groupId.substring(0, groupId.length() - 1) : groupId;
+
+					item.put("groupId", groupId);
+					item.put("artifactId", artifactId);
+					item.put("version", version);
+					deleteDir(tempdir);
+					deps.add(item);
 				}
 			}
 
 		}
+	}
+
+	protected String getGroupId(File tempdir) {
+		String groupId = "";
+		for (File tf : tempdir.listFiles()) {
+			if (tf.isDirectory() && !tf.getName().endsWith("INF")) {
+				if (tf.list().length == 1) {
+					return tf.getName() + "." + getGroupId(tf.getAbsoluteFile());
+				} else {
+					return tf.getName();
+				}
+			}
+		}
+		return groupId;
 	}
 
 	/**
@@ -157,12 +190,9 @@ public class ApplicationAnalyzer extends Analyzer {
 					}
 				} else {
 					ObjectNode item = new ObjectMapper().createObjectNode();
-					item.put("groupId", root.getElementsByTagName("groupId")
-													.item(0).getTextContent());
-					item.put("artifactId", root.getElementsByTagName("artifactId")
-													.item(0).getTextContent());
-					item.put("version", root.getElementsByTagName("version")
-													.item(0).getTextContent());
+					item.put("groupId", root.getElementsByTagName("groupId").item(0).getTextContent());
+					item.put("artifactId", root.getElementsByTagName("artifactId").item(0).getTextContent());
+					item.put("version", root.getElementsByTagName("version").item(0).getTextContent());
 					deps.add(item);
 				}
 			}
@@ -180,9 +210,9 @@ public class ApplicationAnalyzer extends Analyzer {
 	/**
 	 * @return file
 	 */
-	protected File mkdir() {
+	protected File mkdir(File parent) {
 		int uuid = (int) ((Math.random() * 9 + 1) * 100000);
-		File dir = new File(file.getParentFile(), String.valueOf(uuid));
+		File dir = new File(parent, String.valueOf(uuid));
 		dir.mkdirs();
 		return dir;
 	}
@@ -191,9 +221,9 @@ public class ApplicationAnalyzer extends Analyzer {
 	 * @param dir dir
 	 * @throws Exception exception
 	 */
-	protected void unzipTo(File dir) throws Exception {
+	protected void unzipTo(String src, File dir) throws Exception {
 
-		String cmd = "unzip " + file.getAbsolutePath() + " -d " + dir.getAbsolutePath();
+		String cmd = "unzip " + src + " -d " + dir.getAbsolutePath();
 
 		Process p = Runtime.getRuntime().exec(cmd);
 		BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -232,8 +262,8 @@ public class ApplicationAnalyzer extends Analyzer {
 	public static void main(String[] args) throws Exception {
 //		ApplicationAnalyzer aa = new ApplicationAnalyzer(new File("kubernetes-client-0.4-jar-with-dependencies.jar"));
 		ApplicationAnalyzer aa = new ApplicationAnalyzer(new File("kubeext-http-apiserver-1.8.3.jar"));
-//		System.out.println(aa.analysis());
-		aa.addMavenDep(null, new File("E:/codes/Prototype/kubeIT/kubeext-http-apiserver-1.8.3/jkubefrk-1.8.3"));
+		System.out.println(aa.analysis());
+//		aa.addMavenDep(null, new File("E:/codes/Prototype/kubeIT/kubeext-http-apiserver-1.8.3/jkubefrk-1.8.3"));
 
 	}
 }
