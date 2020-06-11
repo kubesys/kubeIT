@@ -6,7 +6,6 @@ package io.github.kubesys.applications;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Properties;
 
@@ -77,8 +76,8 @@ public class JarAnalyzer extends ApplicationAnalyzer {
 		File dir = unzipTo(file);
 		
 		// https://docs.oracle.com/javase/7/docs/technotes/guides/jar/jar.html
-		Properties props = getJarProp(new FileInputStream(
-				new File(dir.getAbsolutePath(), FILE_JAR_METADATA)));
+		Properties props = getProps(new FileInputStream(
+				new File(dir.getAbsolutePath(), FILE_JAR_METADATA)), ":");
 		
 		app.put(KEY_APPTYPE,  getAppType(props));
 		app.put(KEY_BUILDJDK, getBuildJDK(props));
@@ -99,33 +98,6 @@ public class JarAnalyzer extends ApplicationAnalyzer {
 	 *   Now we just support Maven and SpringBoot
 	 * 
 	 ******************************************************/
-	
-	/**
-	 * @param is                           is
-	 * @return                             props
-	 * @throws Exception                   exception
-	 */
-	protected Properties getJarProp(InputStream is) throws Exception {
-
-		BufferedReader br = new BufferedReader(
-				new InputStreamReader(is));
-
-		Properties props = new Properties();
-		
-		String line = null;
-
-		while ((line = br.readLine()) != null) {
-			String[] strs = line.split(":");
-			try {
-				props.put(strs[0].trim(), strs[1].trim());
-			} catch (Exception ex) {
-				// ignore here
-			}
-		}
-
-		br.close();
-		return props;
-	}
 	
 	/**
 	 * @param props                        props

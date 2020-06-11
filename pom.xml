@@ -63,7 +63,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>com.github.jkubefrk.KubeextController</mainClass>
+							<mainClass>io.github.kubesys.Starter</mainClass>
 						</manifest>
 						<manifestEntries>
 							<Class-Path>.</Class-Path>
