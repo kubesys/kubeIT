@@ -1,14 +1,14 @@
 /**
  * Copyright (2020, ) Institute of Software, Chinese Academy of Sciences
  */
-package io.github.kubesys.analyzers;
+package io.github.doslab.analyzers;
 
 import java.io.File;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import io.github.kubesys.Analyzer;
+import io.github.doslab.Analyzer;
 
 /**
  * @author  wuheng09@gmail.com

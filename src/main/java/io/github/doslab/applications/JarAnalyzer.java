@@ -1,7 +1,7 @@
 /**
  * Copyright (2020, ) Institute of Software, Chinese Academy of Sciences
  */
-package io.github.kubesys.applications;
+package io.github.doslab.applications;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import io.github.kubesys.analyzers.ApplicationAnalyzer;
+import io.github.doslab.analyzers.ApplicationAnalyzer;
 
 /**
  * @author  wuheng09@gmail.com

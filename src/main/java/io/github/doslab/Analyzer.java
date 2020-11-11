@@ -1,7 +1,7 @@
 /**
  * Copyright (2020, ) Institute of Software, Chinese Academy of Sciences
  */
-package io.github.kubesys;
+package io.github.doslab;
 
 import java.io.BufferedReader;
 import java.io.File;

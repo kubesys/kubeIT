@@ -3,12 +3,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>io.github.kubesys</groupId>
-	<artifactId>kubeit</artifactId>
+	<groupId>io.github.dos-lab</groupId>
+	<artifactId>prophet</artifactId>
 	<version>0.1</version>
 	<packaging>jar</packaging>
 
-	<name>kubeit</name>
+	<name>prophet</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>

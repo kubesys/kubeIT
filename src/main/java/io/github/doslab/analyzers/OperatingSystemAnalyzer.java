@@ -1,17 +1,19 @@
 /**
  * Copyright (2020, ) Institute of Software, Chinese Academy of Sciences
  */
-package io.github.kubesys.analyzers;
+package io.github.doslab.analyzers;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.util.Properties;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import io.github.kubesys.Analyzer;
+import io.github.doslab.Analyzer;
 
 /**
  * @author  wuheng09@gmail.com
@@ -37,7 +39,9 @@ public class OperatingSystemAnalyzer extends Analyzer {
 	
 	public static String KEY_OS_URL           = "url";
 	
-	public static String KEY_OS_TOOLS         = "tools";
+	public static String KEY_OS               = "os";
+	
+	public static String KEY_SYSTEM           = "system";
 	
 	public static String[] TOOLS_PATHS        = new String[] {"/usr/bin", "/usr/sbin", "/usr/local/bin", "/usr/local/sbin"};
 	
@@ -50,7 +54,7 @@ public class OperatingSystemAnalyzer extends Analyzer {
 	/**
 	 * dependency info
 	 */
-	protected ObjectNode tools = new ObjectMapper().createObjectNode();
+	protected ObjectNode system = new ObjectMapper().createObjectNode();
 	
 	public OperatingSystemAnalyzer(File file) {
 		super(file);
@@ -62,17 +66,46 @@ public class OperatingSystemAnalyzer extends Analyzer {
 		File osinfo = new File(file, OS_CONFIG_FILE);
 		Properties props = getProps(new FileInputStream(
 							osinfo), "=");
-		os.put(KEY_OS_NAME, props.getProperty("ID"));
-		os.put(KEY_OS_VERSION, props.getProperty("VERSION_ID"));
-		os.put(KEY_OS_URL, props.getProperty("HOME_URL"));
+		
+		
+		ObjectNode osInfo = new ObjectMapper().createObjectNode();
+		
+		if (props.size() == 0) {
+			BufferedReader br = new BufferedReader(new FileReader(osinfo));
+			osinfo = osinfo.getParentFile();
+			String line = null;
+			while ((line = br.readLine()) != null) {
+				System.out.println(line);
+				while (line.startsWith("../")) {
+					osinfo = osinfo.getParentFile();
+					line = line.substring("../".length());
+				}
+				
+				osinfo = new File(osinfo, line);
+				props = getProps(new FileInputStream(
+						osinfo), "=");
+				osInfo.put(KEY_OS_NAME, props.getProperty("ID"));
+				osInfo.put(KEY_OS_VERSION, props.getProperty("VERSION_ID"));
+				osInfo.put(KEY_OS_URL, props.getProperty("HOME_URL"));
+			}
+		} else {
+			osInfo.put(KEY_OS_NAME, props.getProperty("ID"));
+			osInfo.put(KEY_OS_VERSION, props.getProperty("VERSION_ID"));
+			osInfo.put(KEY_OS_URL, props.getProperty("HOME_URL"));
+		}
+		os.set(KEY_OS, osInfo);
 		
 		for (String path : TOOLS_PATHS) {
-			for (File f : new File(file, path).listFiles()) {
-				tools.put(f.getName(), f.getName());
+			try {
+				for (File f : new File(file, path).listFiles()) {
+					system.put(f.getName(), f.getName());
+				}
+			} catch (Exception ex) {
+				// ignore here
 			}
 		}
 		
-		os.put(KEY_OS_TOOLS, tools);
+		os.set(KEY_SYSTEM, system);
 		
 		return os;
 	}
