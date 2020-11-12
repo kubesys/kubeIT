@@ -19,20 +19,27 @@ then
   then
     docker pull $1:$2
   fi
-  
+
   mkdir -p /tmp/"$rname"_$2
   docker save $1:$2 > /tmp/"$rname"_$2/image.tar
   cd /tmp/"$rname"_$2
   tar xvf image.tar
   rm -rf image.tar
 
+  mkdir -p data
+
   for dir in `ls`
   do
     if [[ -d $dir ]]
     then
-      tar xvf $dir/layer.tar -C $dir/
+      tar xvf $dir/layer.tar -C data/
     fi
   done
+
+  img=$(docker images -q --no-trunc $1:$2)
+  loc=${img/:/\/}
+  file="/var/lib/docker/image/overlay2/imagedb/content/"$loc
+  \cp $file image.info
 fi
 
 
