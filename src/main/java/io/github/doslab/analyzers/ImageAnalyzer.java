@@ -4,7 +4,6 @@
 package io.github.doslab.analyzers;
 
 import java.io.File;
-import java.io.FileInputStream;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,17 +23,15 @@ import io.github.doslab.Analyzer;
    } 
  **/
 
-public class ImageInfoAnalyzer extends Analyzer {
+public class ImageAnalyzer extends Analyzer {
 
-	public ImageInfoAnalyzer(File file) {
+	
+	public ImageAnalyzer(File file) {
 		super(file);
 	}
 
-	@Override
 	public JsonNode analysis() throws Exception {
-		return new ObjectMapper().readTree(new FileInputStream(file));
+		return new ObjectMapper().readTree(file);
 	}
 
-	
-	
 }

@@ -5,7 +5,7 @@
 
 	<groupId>io.github.dos-lab</groupId>
 	<artifactId>prophet</artifactId>
-	<version>0.1</version>
+	<version>0.2</version>
 	<packaging>jar</packaging>
 
 	<name>prophet</name>
@@ -63,7 +63,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>io.github.kubesys.Starter</mainClass>
+							<mainClass>io.github.doslab.Starter</mainClass>
 						</manifest>
 						<manifestEntries>
 							<Class-Path>.</Class-Path>

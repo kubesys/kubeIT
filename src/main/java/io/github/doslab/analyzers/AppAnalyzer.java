@@ -28,7 +28,7 @@ import io.github.doslab.Analyzer;
    } 
  **/
 
-public abstract class ApplicationAnalyzer extends Analyzer {
+public abstract class AppAnalyzer extends Analyzer {
 
 	
 	public static String KEY_APP_LANGUAGE            = "language";
@@ -51,7 +51,7 @@ public abstract class ApplicationAnalyzer extends Analyzer {
 	 */
 	protected ObjectNode dependsOn = new ObjectMapper().createObjectNode();
 	
-	public ApplicationAnalyzer(File file) {
+	public AppAnalyzer(File file) {
 		super(file);
 	}
 

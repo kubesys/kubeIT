@@ -3,17 +3,17 @@
  */
 package io.github.doslab;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import io.github.doslab.analyzers.ImageInfoAnalyzer;
-import io.github.doslab.analyzers.OperatingSystemAnalyzer;
+import io.github.doslab.analyzers.ImageAnalyzer;
+import io.github.doslab.analyzers.OSAnalyzer;
+import io.github.doslab.analyzers.ToolsAnalyzer;
+import io.github.doslab.applications.JarAnalyzer;
+
 
 /**
  * @author wuheng09@gmail.com
@@ -22,89 +22,53 @@ import io.github.doslab.analyzers.OperatingSystemAnalyzer;
  **/
 public class Starter {
 
-	public static String WIN_ROOT                             = "E:/data/images";
+	public static String WIN_ROOT                             = "E:/data/tmp/";
 	
-	public static String UNIX_ROOT                            = "/var/lib/docker";
+	public static String UNIX_ROOT                            = "/tmp/";
 
 	public static String ROOT                                 = System.getProperty("os.name").toLowerCase().startsWith("win") ? WIN_ROOT : UNIX_ROOT;
 	
-	public static String serviceRegistry                      = "/image/overlay2/repositories.json";
-
-	public static String imageDatabase                        = "/image/overlay2/imagedb/content/";
-
-	public static String layerInfo                            = "/image/overlay2/distribution/v2metadata-by-diffid/";
+	public static String INFO                                 = "image.info";
 	
-	public static String layerDigest                          = "/image/overlay2/distribution/diffid-by-digest/";
+	public static String DATA                                 = "data";
 	
-	public static String layerDatabase                        = "/image/overlay2/layerdb/";
-
-	public static String systemRoot                           = "/overlay2/cid/diff/";
-
 	public static void main(String[] args) throws Exception {
 
 		ObjectNode json = new ObjectMapper().createObjectNode();
+		String     name = args[0].replaceAll("/", "_");
+		String     vers = args[1];
 		
-		String name = args[0];
-		String version = args[1];
-
-		String imageId = getImageId(name, version);
-		System.out.println("imageId: " + imageId);
+		String dir = ROOT + name + "_" + vers;
 		
-		File imageFile = getImageFile(imageId);
-		ImageInfoAnalyzer imageAnalyzer = new ImageInfoAnalyzer(imageFile);
+		File rootFS = new File(dir, DATA);
 		
-		JsonNode imageDB = imageAnalyzer.analysis();
+		json.set("os", new OSAnalyzer(rootFS).analysis());
+		json.set("tools", new ToolsAnalyzer(rootFS).analysis());
+		json.set("image", new ImageAnalyzer(new File(dir, INFO)).analysis());
 		
-		json.set("metadata", imageDB);
-		
-		System.out.println(imageDB.toPrettyString());
-		
-		JsonNode imageLayers = getImageLayers(imageDB);
-		
-		for (int i = 0; i < imageLayers.size(); i++) {
-			String uuid = imageLayers.get(i).asText();
-			JsonNode layer = new ObjectMapper().readTree(new File(ROOT + layerInfo, uuid.replace(":", "/")));
-			String digest = layer.get(0).get("Digest").asText();
-
-			String layerId = null;
-			
-			{
-				BufferedReader br = new BufferedReader(new FileReader(new File(ROOT + layerDigest, digest.replace(":", "/"))));
-				String line = null;
-				while ((line = br.readLine()) != null) {
-					layerId = line;
-					break;
-				}
-				
-			}
-					
-			System.out.println("\t- layerId: " + layerId);
-			BufferedReader br = new BufferedReader(new FileReader(
-					new File(ROOT + layerDatabase + layerId.replace(":", "/") + "/cache-id")));
-			String cid = br.readLine();
-			br.close();
-			File file = new File(ROOT + systemRoot.replace("cid", cid));
-			System.out.println("\t- layerPath: " + file.getAbsolutePath());
-			System.out.println("---------------------------------------");
-			OperatingSystemAnalyzer osa = new OperatingSystemAnalyzer(file);
-			System.out.println(osa.analysis().toPrettyString());
-			System.out.println("---------------------------------------");
+		String workbase = json.get("image").get("config").get("WorkingDir").asText();
+		if (workbase == null || workbase.length() == 0) {
+			return;
 		}
+		
+		ArrayNode depends = new ObjectMapper().createArrayNode();
+		extracted(depends, new File(rootFS, workbase));
+		json.set("depends", depends);
+		
+		
+		System.out.println(json.toPrettyString());
 	}
 
-	protected static String getImageId(String name, String version) throws Exception {
-		JsonNode registry = new ObjectMapper().readTree(
-				new FileInputStream(new File(ROOT + serviceRegistry)));
-		return registry.get("Repositories").get(name)
-							.get(name + ":" + version).asText();
-	}
-	
-	protected static File getImageFile(String imageId) {
-		return new File(ROOT + imageDatabase + imageId.replace(":", "/"));
-	}
-
-	protected static JsonNode getImageLayers(JsonNode imageDb) {
-		return imageDb.get("rootfs").get("diff_ids");
+	protected static void extracted(ArrayNode depends, File workbase) throws Exception {
+		for (File f : workbase.listFiles()) {
+			if (f.isDirectory()) {
+				extracted(depends, f);
+			} else {
+				if (f.getName().endsWith("jar")) {
+					depends.add(new JarAnalyzer(f).analysis());
+				}
+			}
+		}
 	}
 
 }

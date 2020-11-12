@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import io.github.doslab.analyzers.ApplicationAnalyzer;
+import io.github.doslab.analyzers.AppAnalyzer;
 
 /**
  * @author  wuheng09@gmail.com
@@ -31,7 +31,7 @@ import io.github.doslab.analyzers.ApplicationAnalyzer;
  * @author henry
  *
  */
-public class JarAnalyzer extends ApplicationAnalyzer {
+public class JarAnalyzer extends AppAnalyzer {
 
 	public static String VALUE_APP_LANGUAGE               = "Java";
 	
@@ -65,7 +65,6 @@ public class JarAnalyzer extends ApplicationAnalyzer {
 		super(file);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public JsonNode analysis() throws Exception {
 
@@ -83,7 +82,7 @@ public class JarAnalyzer extends ApplicationAnalyzer {
 		app.put(KEY_BUILDJDK, getBuildJDK(props));
 		dependsOnAnalysis(dependsOn, new File(
 					dir, getTargetFile(props)));
-		app.put(KEY_DEPENDS, dependsOn);
+		app.set(KEY_DEPENDS, dependsOn);
 
 		deleteDir(dir);
 
@@ -118,8 +117,10 @@ public class JarAnalyzer extends ApplicationAnalyzer {
 	protected String getBuildJDK(Properties props) {
 		if (props.get(KEY_SPRINGBOOT_VERSION) != null) {
 			return props.get(VALUE_SPRINGBOOT_BUILDJDK).toString();
-		} else {
+		} else if (props.get(VALUE_MAVEN_BUILDJDK) != null) {
 			return props.get(VALUE_MAVEN_BUILDJDK).toString();
+		} else {
+			return "unknown";
 		}
 	}
 	
@@ -160,15 +161,14 @@ public class JarAnalyzer extends ApplicationAnalyzer {
 	protected File unzipTo(File file) throws Exception {
 		
 		File dir = mkdir(file.getParentFile());
-
-		String cmd = "unzip " + file.getAbsolutePath() + " -d " + dir.getAbsolutePath();
+		
+		String cmd = "unzip -o " + file.getAbsolutePath() + " -d " + dir.getAbsolutePath();
 
 		Process p = Runtime.getRuntime().exec(cmd);
 		BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
 		String line = null;
 		while ((line = br.readLine()) != null) {
-		    System.out.println(line);  
 		}
 		
 		br.close();
