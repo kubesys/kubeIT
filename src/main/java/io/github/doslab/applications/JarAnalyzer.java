@@ -115,7 +115,7 @@ public class JarAnalyzer extends AppAnalyzer {
 	 * @return                             buildjdk
 	 */
 	protected String getBuildJDK(Properties props) {
-		if (props.get(KEY_SPRINGBOOT_VERSION) != null) {
+		if (props.get(VALUE_SPRINGBOOT_BUILDJDK) != null) {
 			return props.get(VALUE_SPRINGBOOT_BUILDJDK).toString();
 		} else if (props.get(VALUE_MAVEN_BUILDJDK) != null) {
 			return props.get(VALUE_MAVEN_BUILDJDK).toString();
