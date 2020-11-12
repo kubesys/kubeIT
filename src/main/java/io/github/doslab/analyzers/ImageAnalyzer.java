@@ -7,6 +7,7 @@ import java.io.File;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import io.github.doslab.Analyzer;
 
@@ -31,7 +32,12 @@ public class ImageAnalyzer extends Analyzer {
 	}
 
 	public JsonNode analysis() throws Exception {
-		return new ObjectMapper().readTree(file);
+		JsonNode origin = new ObjectMapper().readTree(file);
+		
+		ObjectNode json = new ObjectMapper().createObjectNode();
+		json.set("architecture", origin.get("architecture"));
+		json.set("config", origin.get("config"));
+		return json;
 	}
 
 }
