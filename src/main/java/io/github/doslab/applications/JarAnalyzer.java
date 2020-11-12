@@ -105,8 +105,10 @@ public class JarAnalyzer extends AppAnalyzer {
 	protected String getAppType(Properties props) {
 		if (props.get(KEY_SPRINGBOOT_VERSION) != null) {
 			return props.get(KEY_SPRINGBOOT_VERSION).toString();
-		} else {
+		} else if (props.get(VALUE_MAVEN_APPTYPE) != null) {
 			return props.get(VALUE_MAVEN_APPTYPE).toString();
+		} else {
+			return "Unknown";
 		}
 	}
 	
