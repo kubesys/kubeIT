@@ -63,7 +63,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>io.github.doslab.Starter</mainClass>
+							<mainClass>io.github.doslab.DockerImage</mainClass>
 						</manifest>
 						<manifestEntries>
 							<Class-Path>.</Class-Path>
