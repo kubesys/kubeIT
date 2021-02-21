@@ -1,0 +1,19 @@
+{
+  "apiVersion" : "doslab.io/v1",
+  "kind" : "Knowledge",
+  "type" : "Dockerhub",
+  "metadata" : {
+    "name" : "adminer-ppc64le"
+  },
+  "spec" : {
+    "image" : "adminer:4.7.6",
+    "arch" : "ppc64le",
+    "os" : "linux",
+    "digest" : "sha256:63c9529c50f0ba7e17e579f1c3afa50f1ad799053696f5f3046132bc1303ffac",
+    "size" : "34384629",
+    "status" : "active",
+    "last_pushed" : "null",
+    "detail" : "https://hub.docker.com/v2/repositories/library/adminer/tags/4.7.6/images",
+    "hashcode" : "2821843+0+0+1398496+1266+0+269+0+0+0+0+0+0+0+10290415+498+15085656+2219+17094+0+0+308+0+1392+0+4192434+1474+0+0+0+570767+498+0+0+0+0"
+  }
+}

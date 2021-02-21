@@ -1,0 +1,19 @@
+{
+  "apiVersion" : "doslab.io/v1",
+  "kind" : "Knowledge",
+  "type" : "Dockerhub",
+  "metadata" : {
+    "name" : "php-s390x"
+  },
+  "spec" : {
+    "image" : "php:fpm-alpine",
+    "arch" : "s390x",
+    "os" : "linux",
+    "digest" : "sha256:82e6ef30f7518228b4b9005ada016fbe81247273348c155f47af76160844a15b",
+    "size" : "29094960",
+    "status" : "active",
+    "last_pushed" : "2021-02-18T01:57:48.335606Z",
+    "detail" : "https://hub.docker.com/v2/repositories/library/php/tags/fpm-alpine/images",
+    "hashcode" : "2602381+0+0+1756400+1260+0+269+0+0+0+0+0+0+0+0+10669912+493+14035889+2267+17518+0+0+8571+0+0+0"
+  }
+}

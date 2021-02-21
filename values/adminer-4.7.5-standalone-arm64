@@ -1,0 +1,19 @@
+{
+  "apiVersion" : "doslab.io/v1",
+  "kind" : "Knowledge",
+  "type" : "Dockerhub",
+  "metadata" : {
+    "name" : "adminer-arm64"
+  },
+  "spec" : {
+    "image" : "adminer:4.7.5-standalone",
+    "arch" : "arm64",
+    "os" : "linux",
+    "digest" : "sha256:324e88cf882828009b2f9f279c2c7320a217b7119ba79cfd98b11545677fc050",
+    "size" : "30794812",
+    "status" : "active",
+    "last_pushed" : "null",
+    "detail" : "https://hub.docker.com/v2/repositories/library/adminer/tags/4.7.5-standalone/images",
+    "hashcode" : "2723075+0+0+1359426+1260+0+268+0+0+0+0+0+0+0+10271109+496+14366228+2216+72676+0+0+310+0+1392+0+1299236+124696+1476+0+0+0+570450+498+0+0+0+0"
+  }
+}

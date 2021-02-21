@@ -1,0 +1,19 @@
+{
+  "apiVersion" : "doslab.io/v1",
+  "kind" : "Knowledge",
+  "type" : "Dockerhub",
+  "metadata" : {
+    "name" : "adminer-ppc64le"
+  },
+  "spec" : {
+    "image" : "adminer:4.7.5-fastcgi",
+    "arch" : "ppc64le",
+    "os" : "linux",
+    "digest" : "sha256:982ceef2d2bd47713abd7b0633af5afeb288c2cd04a34480617b04b47a799772",
+    "size" : "32258731",
+    "status" : "active",
+    "last_pushed" : "null",
+    "detail" : "https://hub.docker.com/v2/repositories/library/adminer/tags/4.7.5-fastcgi/images",
+    "hashcode" : "2822125+0+0+1397881+1258+0+268+0+0+0+0+0+0+0+0+10271124+498+15621302+2215+72996+0+0+8409+0+0+0+308+1392+1350625+135904+1476+0+0+0+570453+497+0+0+0"
+  }
+}

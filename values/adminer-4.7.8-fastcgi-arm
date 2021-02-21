@@ -1,0 +1,19 @@
+{
+  "apiVersion" : "doslab.io/v1",
+  "kind" : "Knowledge",
+  "type" : "Dockerhub",
+  "metadata" : {
+    "name" : "adminer-arm"
+  },
+  "spec" : {
+    "image" : "adminer:4.7.8-fastcgi",
+    "arch" : "arm",
+    "os" : "linux",
+    "digest" : "sha256:735d097583b336e66f71b6e5e5e7b2d9314f1b91d301767260efb1a894182a2c",
+    "size" : "32175336",
+    "status" : "active",
+    "last_pushed" : "2021-02-04T19:37:58.606499Z",
+    "detail" : "https://hub.docker.com/v2/repositories/library/adminer/tags/4.7.8-fastcgi/images",
+    "hashcode" : "2621759+0+0+1684855+1260+0+268+0+0+0+0+0+0+0+0+10351777+496+13309651+2267+17532+0+0+8447+0+0+0+309+1405+3602426+1474+0+0+0+570915+495+0+0+0"
+  }
+}

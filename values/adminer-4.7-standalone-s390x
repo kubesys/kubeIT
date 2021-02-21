@@ -1,0 +1,19 @@
+{
+  "apiVersion" : "doslab.io/v1",
+  "kind" : "Knowledge",
+  "type" : "Dockerhub",
+  "metadata" : {
+    "name" : "adminer-s390x"
+  },
+  "spec" : {
+    "image" : "adminer:4.7-standalone",
+    "arch" : "s390x",
+    "os" : "linux",
+    "digest" : "sha256:bc61323ec1d7671caf7020900e72730108d251b400dcb4c1fe296c438e56268e",
+    "size" : "32508745",
+    "status" : "active",
+    "last_pushed" : "2021-02-08T20:54:38.023264Z",
+    "detail" : "https://hub.docker.com/v2/repositories/library/adminer/tags/4.7-standalone/images",
+    "hashcode" : "2602059+0+0+1756344+1257+0+268+0+0+0+0+0+0+0+10351780+494+13612269+2266+17527+0+0+309+0+1406+0+3582847+1475+0+0+0+577945+499+0+0+0+0"
+  }
+}

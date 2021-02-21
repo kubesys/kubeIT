@@ -1,0 +1,19 @@
+{
+  "apiVersion" : "doslab.io/v1",
+  "kind" : "Knowledge",
+  "type" : "Dockerhub",
+  "metadata" : {
+    "name" : "php-s390x"
+  },
+  "spec" : {
+    "image" : "php:8.0.2-cli-alpine3.13",
+    "arch" : "s390x",
+    "os" : "linux",
+    "digest" : "sha256:6966b9ea951610ddc5b1e1cc47f32d81b18056b3b8d55302694e4445295e966a",
+    "size" : "29018951",
+    "status" : "active",
+    "last_pushed" : "2021-02-18T01:56:30.756429Z",
+    "detail" : "https://hub.docker.com/v2/repositories/library/php/tags/8.0.2-cli-alpine3.13/images",
+    "hashcode" : "2602381+0+0+1756400+1260+0+269+0+0+0+0+0+0+0+10669912+492+13968448+2267+17522+0+0"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "apiVersion" : "doslab.io/v1",
+  "kind" : "Knowledge",
+  "type" : "Dockerhub",
+  "metadata" : {
+    "name" : "php-arm64"
+  },
+  "spec" : {
+    "image" : "php:8.0-fpm-alpine3.13",
+    "arch" : "arm64",
+    "os" : "linux",
+    "digest" : "sha256:6bc71a18e758c3331471e0f5ca456c3c08766d311759a76b8cd1cd320d7ef7ed",
+    "size" : "29550137",
+    "status" : "active",
+    "last_pushed" : "2021-02-18T00:53:24.312472Z",
+    "detail" : "https://hub.docker.com/v2/repositories/library/php/tags/8.0-fpm-alpine3.13/images",
+    "hashcode" : "2711572+0+0+1694455+1260+0+268+0+0+0+0+0+0+0+0+10669934+494+14443781+2267+17535+0+0+8571+0+0+0"
+  }
+}
