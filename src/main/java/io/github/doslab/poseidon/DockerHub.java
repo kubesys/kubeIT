@@ -86,7 +86,13 @@ public class DockerHub {
 								json.set("spec", spec);
 							}
 							System.out.println(json.toPrettyString());
-							FileWriter fw = new FileWriter(new File("values", 
+							
+							File root = new File("values", line);
+							if (!root.exists()) {
+								root.mkdirs();
+							}
+							
+							FileWriter fw = new FileWriter(new File(root, 
 									line + "-" + tag 
 									+ "-" + summary.get("architecture").asText()));
 							fw.write(json.toPrettyString());
