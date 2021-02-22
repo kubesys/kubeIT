@@ -53,11 +53,21 @@ public class DockerHub {
 				String tag = imagesWithAllTags.get(i).get("name").asText();
 				String detailUrl = IMG_URL.replace(KEY_NAME, line)
 								.replace(KEY_TAG, tag);
+				
+				if (tag.equals("latest")) {
+					continue;
+				}
+				
 				JsonNode imagesWithAllDetails = getResult(detailUrl);
 				
 				JsonNode imagesWithAllArch = imagesWithAllTags.get(i).get("images");
 				for (int j = 0; j < imagesWithAllArch.size(); j++) {
 					JsonNode summary = imagesWithAllArch.get(j);
+					
+					if (!summary.has("digest")) {
+						continue;
+					}
+					
 					String arch = summary.get("architecture").asText();
 					
 					for (int k = 0; k < imagesWithAllDetails.size(); k++) {
@@ -92,9 +102,15 @@ public class DockerHub {
 								root.mkdirs();
 							}
 							
-							FileWriter fw = new FileWriter(new File(root, 
+							File file = new File(root, 
 									line + "-" + tag 
-									+ "-" + summary.get("architecture").asText()));
+									+ "-" + summary.get("architecture").asText());
+							
+							if (file.exists()) {
+								continue;
+							}
+							
+							FileWriter fw = new FileWriter(file);
 							fw.write(json.toPrettyString());
 							fw.close();
 						}
